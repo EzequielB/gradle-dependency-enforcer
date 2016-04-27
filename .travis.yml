@@ -1,12 +1,22 @@
 language: groovy
+script: ./gradlew check publish bintrayDeployDescriptor
 jdk:
-- openjdk6
 - oraclejdk7
 - openjdk7
 - oraclejdk8
 before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+deploy:
+  provider: bintray
+  file: "./build/bintrayDeployDescriptor.json"
+  user: "ezequielb"
+  key:
+    secure: "cXEklaAu1MNkKNCPmPIS5JJTxH4StI/7or8DX+HopHzCJXLxYZXQlLTKM7/U6JOIyb6f8GerVO4mgFhDB9q0DfAJzCSH/FOep4K9Wh6XHZM2LDhEITS7t03DgItOLit74HhM3OVTs6k1na4mqHKChhRRsf9VkD2h7KVU3dSdEDm/en5xWBYvgn7YUgYg2sj22Oez4T/jpU5PotMH7ZnUymWbBkOzLMvWFFj5KlWheQCmAmBP2De60q/kkT1lxKPUTR5rfsmX00cLGjwN4TXQsrnxiIt1LJsmYifhjAHA7M+h6FxEPwWhznFE6ZE9kznoMRx53NU08Xx7/ECxaGQVRiw+HL0OCKj1zozz4hRW1ZVcQyci4NHUNc16fpeGCAk+wlFsTyk9DvmN/DbW5UZjWxsCCkQ2cZM0ZDRfenmx30lVHUxssw0TchrXgVnvxWhhJ9Yqywnpey/iLmrJDrQxrIm3Td8Z1lB00Zpqpm7Ge/hxh6Wy1Dli4lIIbi5t+uv0aWD8qbmF+kOc1LWgr/2zrHFkJlDLEMHgIc00iCuIbci/pUK8UL/fIpLAXbtmKkePOxGRsxv3/glUQggPzYqukzFdgScsGhigYL7f9qEUa4FMgJNnqGQJTrgGS6uTvI3o35hz4DabyebQFQgoDo3ox42Rq4Ps1CG7Dn2oxb0/9oQ="
+  dry-run: false
+  on:
+    jdk: openjdk7
+    tags: true
