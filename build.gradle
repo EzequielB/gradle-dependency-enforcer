@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.ezequielb'
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 description 'Gradle plugin to enforce dependencies in a finer way within a project artifact'
 
 sourceCompatibility = 1.6
