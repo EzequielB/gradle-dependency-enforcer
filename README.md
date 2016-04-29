@@ -6,15 +6,30 @@ Gradle plugin to enforce dependencies in a finer way within a project artifact.
 ## Motivation
 Restrict how your artifcat components interacts in compile time, limiting new components dependencies and old components coupling increase.
 
+## Installation
+```groovy
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'io.github.ezequielb:gradle-dependency-enforcer:1.0.0'
+    }
+}
+
+apply plugin: 'io.github.ezequielb.gradle-dependency-enforcer'
+```
+
+
 ## Tasks
-The plugin has single task named ``enforceDependency``, that performs a dependency check within the project using the defined configuration.
+The plugin has single task named ``enforceDependency`` that performs a dependency check within the project using the given configuration.
 
 ## Configuration
 When enabled, the plugin adds an extension to the ``project`` named ``enforceDependency``. Using this extension rules can be set to restrict compile time components interaction.
 
 `````groovy
 enforceDependency {
-  // run this task on check task
+  // run this task as part of the check task
   enableOnCheck true 
   
   // make the task fail if disallowed dependencies uses are found
