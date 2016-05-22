@@ -1,5 +1,6 @@
 # gradle-dependency-enforcer
 [![Build Status](https://travis-ci.org/EzequielB/gradle-dependency-enforcer.svg?branch=master)](https://travis-ci.org/EzequielB/gradle-dependency-enforcer)
+[![codecov](https://codecov.io/gh/EzequielB/gradle-dependency-enforcer/branch/master/graph/badge.svg)](https://codecov.io/gh/EzequielB/gradle-dependency-enforcer)
 
 Gradle plugin to enforce dependencies in a finer way within a project artifact.
 
