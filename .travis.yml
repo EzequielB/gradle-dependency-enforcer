@@ -1,5 +1,5 @@
 language: groovy
-script: ./gradlew check publish bintrayDeployDescriptor
+script: ./gradlew check publish bintrayDeployDescriptor jacocoTestReport
 jdk:
 - oraclejdk7
 - openjdk7
@@ -20,3 +20,5 @@ deploy:
   on:
     jdk: openjdk7
     tags: true
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

@@ -1,9 +1,9 @@
 plugins {
-    //id 'net.saliman.cobertura' version '2.3.1'
     id 'groovy'
     id 'java'
     id 'maven'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 group 'io.github.ezequielb'
@@ -89,15 +89,19 @@ task bintrayDeployDescriptor << {
     descriptorFile.text = bintrayDeployDescriptor
 }
 
-// TODO: which code coverage tool?
+/*gradle.taskGraph.whenReady { graph ->
+    if (graph.hasTask(':jacocoTestReport')) {
+        compileGroovy.groovyOptions.optimizationOptions.all = false
+    }
+}*/
 
-//jacocoTestReport {
-//    reports {
-//        xml.enabled false
-//        csv.enabled false
-//        html.enabled true
-//        html.destination "${buildDir}/jacocoHtml"
-//    }
-//}
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
 
 
