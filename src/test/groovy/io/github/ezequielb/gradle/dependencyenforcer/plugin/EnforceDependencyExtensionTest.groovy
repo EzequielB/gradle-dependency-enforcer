@@ -1,12 +1,8 @@
 package io.github.ezequielb.gradle.dependencyenforcer.plugin
 
-import io.github.ezequielb.gradle.dependencyenforcer.plugin.EnforceDependencyExtension
 import org.junit.Assert
 import org.junit.Test
 
-/**
- * Created by ezequiel on 4/25/16.
- */
 class EnforceDependencyExtensionTest {
 
     @Test
