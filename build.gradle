@@ -97,11 +97,14 @@ task bintrayDeployDescriptor << {
     }
 }*/
 
+
+
 test {
     // FIXME: jacoco.asJvmArg is causing the build to fail, so retrieve the agent another way
     def jacocoAgenPath =  project.zipTree(project.configurations["jacocoAgent"].singleFile).filter { it.name == 'jacocoagent.jar' }.singleFile
     environment.put("jacocoAgenPath", jacocoAgenPath)
     environment.put("jacocoDestinationFile", jacoco.destinationFile)
+    environment.put("testProjectSrcDir", project.sourceSets.test.java.srcDirs.iterator()[0].path)
 }
 
 jacocoTestReport {

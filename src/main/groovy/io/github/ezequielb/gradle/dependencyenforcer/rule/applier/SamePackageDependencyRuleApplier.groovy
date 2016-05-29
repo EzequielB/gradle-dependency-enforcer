@@ -12,7 +12,7 @@ class SamePackageDependencyRuleApplier implements DependencyRuleApplier {
 
     SamePackageDependencyRuleApplier(String className, UsageEnforcement usageEnforcement, int initialWeight) {
         def pkg = PatternUtils.getClassPackage(className)
-        this.samePackagePattern = PatternUtils.buildStrictPackagePattern(pkg)
+        this.samePackagePattern = PatternUtils.buildPackagePattern("$pkg.")
         this.matchingWeight = initialWeight + PatternUtils.getResolvedExpressionWeight(pkg)
         this.usageEnforcement = usageEnforcement
     }

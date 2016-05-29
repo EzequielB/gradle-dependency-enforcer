@@ -27,27 +27,35 @@ abstract class PatternUtils {
         return buildWithCapture(pkg)
     }
 
-    static Pattern buildStrictPackagePattern(String pkg) {
-        Pattern.compile(Pattern.quote(pkg) + "\\.$IDENTIFIER_REGEX")
-    }
+//    static Pattern buildStrictPackagePattern(String pkg) {
+//        Pattern.compile(Pattern.quote(pkg) + "\\.$IDENTIFIER_REGEX")
+//    }
 
     static private Pattern buildStatic(String pkg) {
-        Pattern.compile(Pattern.quote(pkg) + "(?:\\.$IDENTIFIER_REGEX)+")
+        Pattern.compile(Pattern.quote(getPackageString(pkg)) + getPackagePatternEnding(pkg))
     }
 
     static private Pattern buildWithCapture(String pkg) {
-        String pkgPatternString = pkg.split('\\{\\d+\\}').collect({
+        String pkgPatternString = getPackageString(pkg).split('\\{\\d+\\}').collect({
             Pattern.quote(it)
         }).join(CAPTURING_IDENTIFIER_REGEX)
         if (pkg.endsWith("}")) {
             pkgPatternString += CAPTURING_IDENTIFIER_REGEX
         }
-        return Pattern.compile(pkgPatternString + "(?:\\.$IDENTIFIER_REGEX)+")
+        return Pattern.compile(pkgPatternString + getPackagePatternEnding(pkg))
     }
 
-    /*static Pattern buildWithEvaluatedCaptures(String pattern, List<String> captures) {
-        return buildStatic(getPackageWithEvaluatedCaptures(pattern, captures))
-    }*/
+    static private String getPackagePatternEnding(String pkg) {
+        if (pkg.endsWith(".")) {
+            return "\\.$IDENTIFIER_REGEX"
+        } else {
+            return "(?:\\.$IDENTIFIER_REGEX)+"
+        }
+    }
+
+    static private String getPackageString(String pkg) {
+        return pkg.endsWith(".") ? pkg.substring(0, pkg.size() - 1) : pkg
+    }
 
     static String getClassPackage(String className) {
         int lastPackage = className.lastIndexOf(".")

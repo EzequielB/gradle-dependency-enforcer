@@ -21,30 +21,70 @@ public class DependencyEnforcerPluginTest {
     }
 
     @Test
-    public void simpleBuildTest() throws IOException {
+    public void simpleSuccessfulBuildTest() throws IOException {
+        String enforceDescriptor = """
+        enforceDependency {
+          enableOnCheck true
+          failOnDisallowedUsage true
+
+          rules {
+            pkg('com.example.x') {
+              allow 'com.example.y'
+            }
+
+            all {
+              allow 'com.example.'
+            }
+          }
+        }
+        """
+        GradleRunner runner = buildRunner(enforceDescriptor)
+        BuildResult result = runner.build()
+        Assert.assertEquals(TaskOutcome.SUCCESS,
+                result.task(":${DependencyEnforcerPlugin.ENFORCE_DEPENDENCY_TASK_NAME}").getOutcome());
+    }
+
+    @Test
+    public void simpleFailingBuildTest() throws IOException {
+        String enforceDescriptor = """
+        enforceDependency {
+          enableOnCheck true
+          failOnDisallowedUsage true
+
+          rules {
+            pkg('com.example.x') {
+              allow 'com.example.'
+            }
+
+            all {
+              allow 'com.example.'
+            }
+          }
+        }
+        """
+        GradleRunner runner = buildRunner(enforceDescriptor)
+        BuildResult result = runner.buildAndFail()
+        Assert.assertEquals(TaskOutcome.FAILED,
+                result.task(":${DependencyEnforcerPlugin.ENFORCE_DEPENDENCY_TASK_NAME}").getOutcome());
+    }
+
+    private GradleRunner buildRunner(String enforceDescriptor) {
+        String testSrcDir = System.getenv().get("testProjectSrcDir")
         String buildFileContent = """
         plugins {
             id 'java'
             id 'io.github.ezequielb.gradle-dependency-enforcer'
         }
 
-        enforceDependency {
-          enableOnCheck true
-          failOnDisallowedUsage true
-
-          rules {
-            pkg('com.example') {
-              allow 'com.example.package1', 'com.example.package2'
-              disallow 'com.example.package3'
-              disallow 'group1:moduleA'
+        sourceSets {
+            main {
+                java {
+                    srcDir '$testSrcDir'
+                }
             }
-
-            all {
-              allow 'com.example.x', 'com.example.y'
-              disallow 'com.example.z'
-            }
-          }
         }
+
+        $enforceDescriptor
         """
         buildFile.text = buildFileContent
 
@@ -54,14 +94,12 @@ public class DependencyEnforcerPluginTest {
                 "includes=io/github/ezequielb/gradle/dependencyenforcer/**," +
                 "excludes=io/github/ezequielb/gradle/dependencyenforcer/**/*Test," +
                 "destfile=$destinationFile,append=true"
-        BuildResult result = ((DefaultGradleRunner) GradleRunner.create()
+
+        return ((DefaultGradleRunner) GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
                 .withPluginClasspath())
                 .withJvmArguments(jvmArg)
                 .withArguments("check")
-                .build();
-        Assert.assertEquals(result.task(":${DependencyEnforcerPlugin.ENFORCE_DEPENDENCY_TASK_NAME}").getOutcome(),
-                TaskOutcome.SUCCESS);
     }
 
 }
