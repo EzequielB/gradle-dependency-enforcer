@@ -68,3 +68,6 @@ enforceDependency {
 }
 `````
 
+## Releases
+* 1.0.1: String package, improved coverage
+* 1.0.0: Initial version
